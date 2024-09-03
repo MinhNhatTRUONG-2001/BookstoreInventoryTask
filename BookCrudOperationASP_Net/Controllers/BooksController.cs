@@ -21,7 +21,7 @@ namespace BookCrudOperationASP_Net.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            throw new NotImplementedException();
+            return View(_booksRepository.GetAllBooks());
         }
 
 
@@ -35,7 +35,15 @@ namespace BookCrudOperationASP_Net.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Book book)
         {
-            throw new NotImplementedException();
+            bool isSuccess = _booksRepository.AddBook(book);
+            if (isSuccess)
+            {
+                return Index();
+            }
+            else
+            {
+                return Create();
+            }
         }
 
         [HttpGet]
@@ -49,12 +57,28 @@ namespace BookCrudOperationASP_Net.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(int id, Book objBook)
         {
-            throw new NotImplementedException();
+            bool isSuccess = _booksRepository.UpdateBook(objBook);
+            if (isSuccess)
+            {
+                return Index();
+            }
+            else
+            {
+                return Update(id);
+            }
         }
 
         public IActionResult Delete(int id)
         {
-            throw new NotImplementedException();
+            bool isSuccess = _booksRepository.DeleteBook(id);
+            if (isSuccess)
+            {
+                return Index();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

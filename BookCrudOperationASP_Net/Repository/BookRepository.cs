@@ -17,27 +17,71 @@ namespace BookCrudOperationASP_Net.Data
 
         public List<Book> GetAllBooks()
         {
-            throw new NotImplementedException();
+            return this._entities.Books.ToList();
         }
 
         public Book GetBookById(int id)
         {
-            throw new NotImplementedException();
+            return this._entities.Books.DefaultIfEmpty(null).FirstOrDefault(b => b.Id == id);
         }
 
         public bool AddBook(Book book)
         {
-            throw new NotImplementedException();
+            if (book == null)
+            {
+                return false;
+            }
+            else
+            {
+                Book sameIsbnBook = this._entities.Books.FirstOrDefault(b => b.isbn == book.isbn);
+                if (sameIsbnBook == null)
+                {
+                    this._entities.Books.Add(book);
+                    this._entities.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         public bool UpdateBook(Book book)
         {
-            throw new NotImplementedException();
+            if (book == null)
+            {
+                return false;
+            }
+            else
+            {
+                Book sameIdAndIsbnBook = this._entities.Books.FirstOrDefault(b => b.Id == book.Id && b.isbn == book.isbn);
+                if (sameIdAndIsbnBook == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    this._entities.Books.Update(book);
+                    this._entities.SaveChanges();
+                    return true;
+                }
+            }
         }
 
         public bool DeleteBook(int id)
         {
-            throw new NotImplementedException();
+            Book book = this._entities.Books.FirstOrDefault(b => b.Id == id);
+            if (book == null)
+            {
+                return false;
+            }
+            else
+            {
+                this._entities.Books.Remove(book);
+                this._entities.SaveChanges(true);
+                return true;
+            }
         }
     }
 }
