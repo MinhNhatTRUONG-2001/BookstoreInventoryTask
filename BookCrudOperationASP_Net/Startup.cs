@@ -57,6 +57,8 @@ namespace BookCrudOperationASP_Net
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseRouting();
+
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<BookDbContext>();

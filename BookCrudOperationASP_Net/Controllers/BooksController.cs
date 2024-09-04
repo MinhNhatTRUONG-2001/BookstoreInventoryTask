@@ -35,15 +35,19 @@ namespace BookCrudOperationASP_Net.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Book book)
         {
-            bool isSuccess = _booksRepository.AddBook(book);
-            if (isSuccess)
+            if (ModelState.IsValid)
             {
-                return Index();
+                bool isSuccess = _booksRepository.AddBook(book);
+                if (isSuccess)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Book creation failed.");
+                }
             }
-            else
-            {
-                return Create();
-            }
+            return View(book);
         }
 
         [HttpGet]
@@ -57,15 +61,19 @@ namespace BookCrudOperationASP_Net.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(int id, Book objBook)
         {
-            bool isSuccess = _booksRepository.UpdateBook(objBook);
-            if (isSuccess)
+            if (ModelState.IsValid)
             {
-                return Index();
+                bool isSuccess = _booksRepository.UpdateBook(objBook);
+                if (isSuccess)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Book update failed.");
+                }
             }
-            else
-            {
-                return Update(id);
-            }
+            return View(objBook);
         }
 
         public IActionResult Delete(int id)
@@ -73,7 +81,7 @@ namespace BookCrudOperationASP_Net.Controllers
             bool isSuccess = _booksRepository.DeleteBook(id);
             if (isSuccess)
             {
-                return Index();
+                return RedirectToAction(nameof(Index));
             }
             else
             {

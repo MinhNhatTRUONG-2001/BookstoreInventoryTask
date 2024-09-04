@@ -12,17 +12,17 @@ namespace BookCrudOperationASP_Net.Data
 
         public BookRepository(BookDbContext bookDbContext)
         {
-            this._entities = bookDbContext;
+            _entities = bookDbContext;
         }
 
         public List<Book> GetAllBooks()
         {
-            return this._entities.Books.ToList();
+            return _entities.Books.ToList();
         }
 
         public Book GetBookById(int id)
         {
-            return this._entities.Books.DefaultIfEmpty(null).FirstOrDefault(b => b.Id == id);
+            return _entities.Books.DefaultIfEmpty(null).FirstOrDefault(b => b.Id == id);
         }
 
         public bool AddBook(Book book)
@@ -33,11 +33,11 @@ namespace BookCrudOperationASP_Net.Data
             }
             else
             {
-                Book sameIsbnBook = this._entities.Books.FirstOrDefault(b => b.isbn == book.isbn);
+                Book sameIsbnBook = _entities.Books.FirstOrDefault(b => b.isbn == book.isbn);
                 if (sameIsbnBook == null)
                 {
-                    this._entities.Books.Add(book);
-                    this._entities.SaveChanges();
+                    _entities.Books.Add(book);
+                    _entities.SaveChanges();
                     return true;
                 }
                 else
@@ -55,15 +55,15 @@ namespace BookCrudOperationASP_Net.Data
             }
             else
             {
-                Book sameIdAndIsbnBook = this._entities.Books.FirstOrDefault(b => b.Id == book.Id && b.isbn == book.isbn);
-                if (sameIdAndIsbnBook == null)
+                Book existingIsbnBook = _entities.Books.FirstOrDefault(b => b.Id != book.Id && b.isbn == book.isbn);
+                if (existingIsbnBook != null)
                 {
                     return false;
                 }
                 else
                 {
-                    this._entities.Books.Update(book);
-                    this._entities.SaveChanges();
+                    _entities.Books.Update(book);
+                    _entities.SaveChanges();
                     return true;
                 }
             }
@@ -71,15 +71,15 @@ namespace BookCrudOperationASP_Net.Data
 
         public bool DeleteBook(int id)
         {
-            Book book = this._entities.Books.FirstOrDefault(b => b.Id == id);
+            Book book = _entities.Books.FirstOrDefault(b => b.Id == id);
             if (book == null)
             {
                 return false;
             }
             else
             {
-                this._entities.Books.Remove(book);
-                this._entities.SaveChanges(true);
+                _entities.Books.Remove(book);
+                _entities.SaveChanges(true);
                 return true;
             }
         }
